@@ -9,6 +9,8 @@ function Autogen(uri, callback) {
     var query;
     BBPromise.try(function () {
         query = core.normalizeUri(uri).query;
+        core.checkType(query, 'forcegen', 'boolean');
+        self.forcegen = !!query.forcegen;
         core.checkType(query, 'mingen', 'zoom');
         self.mingen = query.mingen;
         core.checkType(query, 'maxgen', 'zoom');
@@ -30,8 +32,12 @@ function Autogen(uri, callback) {
 
 Autogen.prototype.getTile = function(z, x, y, callback) {
     var self = this;
-    return self.storage
-        .getTileAsync(z, x, y)
+
+    var getp = self.forcegen
+      ? attempt(() => core.throwNoTile())
+      : self.storage.getTileAsync(z, x, y)
+
+    return getp
         .catch(function (err) {
             if ((self.mingen !== undefined && z < self.mingen) ||
                 (self.maxgen !== undefined && z > self.maxgen) ||
