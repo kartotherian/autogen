@@ -24,8 +24,9 @@ dyn:
     # Optional:
     mingen: 10  # Only generate tiles if missing within this zoom range
     maxgen: 18
-    minstore: 10  # if generated, only store them if within this zoom range 
+    minstore: 10  # if generated, only store them if within this zoom range
     maxstore: 15
+    forcegen: false # enable to force tile generation
 ```
 
 See https://github.com/kartotherian/kartotherian
